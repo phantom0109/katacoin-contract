@@ -34,8 +34,8 @@ contract KATA {
 
     uint256 private _totalSupply = 50 * (10 ** 9) * (10 ** 18);
 
-    string private _name = "Katana Inu";
-    string private _symbol = "KATA";
+    string constant _name = "Katana Inu";
+    string constant _symbol = "KATA";
 
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
