@@ -32,7 +32,7 @@ contract KATA {
 
     mapping(address => mapping(address => uint256)) private _allowances;
 
-    uint256 private _totalSupply = 50 * (10 ** 9) * (10 ** 18);
+    uint256 private _totalSupply = 50 * (10 ** 9) * (10 ** 18);     // 50 Billion 
 
     string private _name = "Katana Inu";
     string private _symbol = "KATA";
