@@ -19,7 +19,7 @@
  */
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
- 
+
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 
@@ -42,24 +42,34 @@ module.exports = {
     // You should run a client (like ganache-cli, geth or parity) in a separate terminal
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
-    
-    kovan: {
-      provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.KOVAN_RPC_URL),
-      network_id: 42,
-      timeoutBlocks: 1000000,
-      networkCheckTimeout: 999999, 
-      skipDryRun: true,
-      confirmations: 0,
-      websockets: true
+    development: {
+      host: '127.0.0.1',     // Localhost (default: none)
+      port: 8545,            // Standard Ethereum port (default: none)
+      network_id: '*',       // Any network (default: none)
     },
-    main: {
-      provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.MAINNET_RPC_URL),
-      network_id: 1,
-      timeoutBlocks: 1000000,
-      networkCheckTimeout: 999999,
-      skipDryRun: true,
-      confirmations: 2,
-      websockets: true
+    mainnet: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://mainnet.infura.io/v3/${process.env.INFURA_APP_ID}`),
+      network_id: 1,       // Mainnet's id
+      networkCheckTimeout: 10000000,
+      confirmations: 0,    // # of confs to wait between deployments. (default: 0)
+      timeoutBlocks: 2000,  // # of blocks before a deployment times out  (minimum/default: 50)
+      skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
+    },
+    kovan: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://kovan.infura.io/v3/${process.env.INFURA_APP_ID}`),
+      network_id: 42,       // Kovan's id
+      networkCheckTimeout: 10000000,
+      confirmations: 0,    // # of confs to wait between deployments. (default: 0)
+      timeoutBlocks: 2000,  // # of blocks before a deployment times out  (minimum/default: 50)
+      skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
+    },
+    goerli: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://goerli.infura.io/v3/${process.env.INFURA_APP_ID}`),
+      network_id: 5,       // Goerli's id
+      networkCheckTimeout: 10000000,
+      confirmations: 0,    // # of confs to wait between deployments. (default: 0)
+      timeoutBlocks: 2000,  // # of blocks before a deployment times out  (minimum/default: 50)
+      skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     },
   },
 
