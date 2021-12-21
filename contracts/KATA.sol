@@ -32,10 +32,10 @@ contract KATA {
 
     mapping(address => mapping(address => uint256)) private _allowances;
 
-    uint256 private _totalSupply = 50 * (10 ** 9) * (10 ** 18);     // 50 Billion 
+    uint256 private constant _totalSupply = 50 * (10 ** 9) * (10 ** 18);     // 50 Billion
 
-    string private _name = "Katana Inu";
-    string private _symbol = "KATA";
+    string private constant _name = "Katana Inu";
+    string private constant _symbol = "KATA";
 
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
@@ -60,16 +60,25 @@ contract KATA {
      * All two of these values are immutable: they can only be set once during
      * construction.
      */
-    constructor() {
-        _balances[msg.sender] = _totalSupply;
-        
-        emit Transfer(address(0), msg.sender, _totalSupply);
+    constructor(address[] memory addrs, uint256[] memory tokens) {
+        uint256 totalTokens = 0;
+        for (uint256 i = 0; i < addrs.length; i++) {
+          totalTokens += tokens[i];
+
+          require(addrs[i] != address(0), "addrs must contain valid addresses");
+
+          _balances[addrs[i]] = tokens[i];
+
+          emit Transfer(address(0), addrs[i], tokens[i]);
+        }
+
+        require(totalTokens == _totalSupply, "total tokens must be totalSupply");
     }
 
     /**
      * @dev Returns the name of the token.
      */
-    function name() public view returns (string memory) {
+    function name() public pure returns (string memory) {
         return _name;
     }
 
@@ -77,7 +86,7 @@ contract KATA {
      * @dev Returns the symbol of the token, usually a shorter version of the
      * name.
      */
-    function symbol() public view returns (string memory) {
+    function symbol() public pure returns (string memory) {
         return _symbol;
     }
 
@@ -101,7 +110,7 @@ contract KATA {
     /**
      * @dev See {IERC20-totalSupply}.
      */
-    function totalSupply() public view returns (uint256) {
+    function totalSupply() public pure returns (uint256) {
         return _totalSupply;
     }
 
@@ -120,7 +129,7 @@ contract KATA {
      * - `recipient` cannot be the zero address.
      * - the caller must have a balance of at least `amount`.
      */
-    function transfer(address recipient, uint256 amount) public returns (bool) {
+    function transfer(address recipient, uint256 amount) external returns (bool) {
         _transfer(msg.sender, recipient, amount);
         return true;
     }
@@ -139,7 +148,7 @@ contract KATA {
      *
      * - `spender` cannot be the zero address.
      */
-    function approve(address spender, uint256 amount) public returns (bool) {
+    function approve(address spender, uint256 amount) external returns (bool) {
         _approve(msg.sender, spender, amount);
         return true;
     }
@@ -161,7 +170,7 @@ contract KATA {
         address sender,
         address recipient,
         uint256 amount
-    ) public returns (bool) {
+    ) external returns (bool) {
         _transfer(sender, recipient, amount);
 
         uint256 currentAllowance = _allowances[sender][msg.sender];
@@ -185,7 +194,7 @@ contract KATA {
      *
      * - `spender` cannot be the zero address.
      */
-    function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
+    function increaseAllowance(address spender, uint256 addedValue) external returns (bool) {
         _approve(msg.sender, spender, _allowances[msg.sender][spender] + addedValue);
         return true;
     }
@@ -204,7 +213,7 @@ contract KATA {
      * - `spender` must have allowance for the caller of at least
      * `subtractedValue`.
      */
-    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
+    function decreaseAllowance(address spender, uint256 subtractedValue) external returns (bool) {
         uint256 currentAllowance = _allowances[msg.sender][spender];
         require(currentAllowance >= subtractedValue, "ERC20: decreased allowance below zero");
         unchecked {
